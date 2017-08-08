@@ -1,12 +1,39 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
+import React, { Component } from "react";
+import photo from "./images/large-round.png";
 import "photonkit/dist/css/photon.css";
-import './App.css';
+import "./App.css";
 
-class DeepEnd {
-  template() {
+class Model {
+  videos = [
+    { source : "https://www.youtube.com/embed/NCXfKyfpBKI?ecver=1&autoplay=1&controls=0&showinfo=0&rel=0&modestbranding=1", title : "Deep End" },
+    { source : "https://www.youtube.com/embed/lBN9VDFDvOk?ecver=1&autoplay=1&controls=0&showinfo=0&rel=0&modestbranding=1", title : "Heart Stop" },
+    { source : "https://www.youtube.com/embed/zeP7bqMySmE?ecver=1&autoplay=1&controls=0&showinfo=0&rel=0&modestbranding=1", title : "Strangled Love" }
+  ];
+  currentVideo = this.videos[0];
+}
+
+class DeepEnd extends Component {
+  windowStyle = { cursor: "pointe" }
+  paneStyle = { overflowY: "visible", borderLeft: "none" }
+  iframeStyle = { border : 0 }
+
+  item(video) {
     return (
-      <div className="window">
+        <li onClick={ (e) => this.props.play(video)} 
+            key={video.source} 
+            className={ "list-group-item " + (video.source === this.props.model.currentVideo.source ? "active" : "")}>
+          <img className="img-circle media-object pull-left" src={photo} width="32" height="32" alt="Jannine Weigel" />
+          <div className="media-body">
+            <strong>{video.title}</strong>
+            <p>Jannine Weigel</p>
+          </div>
+        </li>
+    );
+  }
+
+  render() {
+    return (
+      <div className="window" style={this.windowStyle}>
         <header className="toolbar toolbar-header">
           <div className="toolbar-actions">
             <button className="btn btn-default pull-right">
@@ -15,19 +42,13 @@ class DeepEnd {
           </div>
         </header>
         <div className="window-content">
-          <div className="pane">
+          <div className="pane" style={this.paneStyle}>
             <ul className="list-group">
-              <li className="list-group-item active" id="s1">
-                <img className="img-circle media-object pull-left" src="images/large-round.png" width="32" height="32" />
-                <div className="media-body">
-                  <strong>Deep End</strong>
-                  <p>Jannine Weigel</p>
-                </div>
-              </li>
+                {this.props.model.videos.map(x => this.item(x))}
             </ul>
           </div>
           <div className="pane">
-            <iframe width="560" height="315" src="https://www.youtube.com/embed/NCXfKyfpBKI?ecver=1&controls=0&showinfo=0&rel=0&?modestbranding=1" frameborder="0" allowfullscreen></iframe>
+            <iframe style={this.iframeStyle} title="video" width="560" height="315" src={this.props.model.currentVideo.source}></iframe>
           </div>
         </div>
         <footer className="toolbar toolbar-footer">
@@ -39,9 +60,24 @@ class DeepEnd {
 }
 
 class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = new Model();
+    this.play = this.play.bind(this)
+  }
+
+  play(video) {
+    this.setState({
+      videos : this.state.videos,
+      currentVideo : video
+    });
+  }
+
   render() {
     return (
-      new DeepEnd().template()
+      <div>
+        <DeepEnd play={this.play} model={this.state}></DeepEnd>
+      </div>
     );
   }
 }

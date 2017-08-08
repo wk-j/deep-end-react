@@ -1,5 +1,6 @@
 {
   "name": "deep-end-react",
+  "productName": "DE REACT @2017",
   "version": "0.1.0",
   "private": true,
   "main": "main.js",
@@ -15,9 +16,11 @@
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
-    "electron-dev": "ELECTRON_START_URL=http://localhost:3000 electron ."
+    "electron-dev": "ELECTRON_START_URL=http://localhost:3000 electron .",
+    "package": "electron-packager . --overwrite --platform=darwin --arch=x64 --icon=src/images/large-round.icns --prune=false --out=builds"
   },
   "devDependencies": {
-    "electron": "^1.6.11"
+    "electron": "^1.6.11",
+    "electron-packager": "^8.7.2"
   }
 }
